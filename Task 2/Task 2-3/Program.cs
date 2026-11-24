@@ -5,6 +5,11 @@ namespace Task_2_3
     internal static class Program
     {
         /// <summary>
+        /// Точность сравнения вещественных чисел.
+        /// </summary>
+        private const double Epsilon = 1e-9;
+
+        /// <summary>
         /// Точка входа в программу.
         /// </summary>
         /// <param name="args">Список формальных параметров.</param>
@@ -12,21 +17,36 @@ namespace Task_2_3
         {
             Console.WriteLine("Решение уравнения |x - a| = b");
 
-            Console.Write("Введите a = ");
-            if (!double.TryParse(Console.ReadLine(), out double a))
+            if (!TryReadDouble("Введите a = ", out double a))
             {
-                Console.WriteLine("Ошибка ввода.");
                 return;
             }
 
-            Console.Write("Введите b = ");
-            if (!double.TryParse(Console.ReadLine(), out double b))
+            if (!TryReadDouble("Введите b = ", out double b))
             {
-                Console.WriteLine("Ошибка ввода.");
                 return;
             }
 
             SolveEquation(a, b);
+        }
+
+        /// <summary>
+        /// Запрашивает у пользователя вещественное число и считывает его с консоли.
+        /// </summary>
+        /// <param name="message">Приглашение к вводу.</param>
+        /// <param name="value">Введённое число.</param>
+        /// <returns>true, если число введено корректно; иначе false.</returns>
+        static bool TryReadDouble(string message, out double value)
+        {
+            Console.Write(message);
+
+            if (!double.TryParse(Console.ReadLine(), out value))
+            {
+                Console.WriteLine("Ошибка ввода.");
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -36,11 +56,11 @@ namespace Task_2_3
         /// <param name="b">Параметр b.</param>
         static void SolveEquation(double a, double b)
         {
-            if (b < 0)
+            if (b < -Epsilon)
             {
                 Console.WriteLine("Количество корней: 0. Модуль не может быть отрицательным.");
             }
-            else if (b == 0)
+            else if (Math.Abs(b) < Epsilon)
             {
                 Console.WriteLine($"Количество корней: 1. x = {a}");
             }
